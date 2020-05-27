@@ -135,14 +135,14 @@ def create_baseline():
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 	return model
 
-# evaluate model with standardized dataset
+# 1 evaluate model with standardized dataset
 estimator = KerasClassifier(build_fn=create_baseline, epochs=100, batch_size=5, verbose=0)
 kfold = StratifiedKFold(n_splits=10, shuffle=True, random_state=seed)
 results = cross_val_score(estimator, pca.components_, encoded_Y, cv=kfold)
 print("Results: %.2f%% (%.2f%%)" % (results.mean()*100, results.std()*100))
 # Results: 69.05% (9.86%)
 
-# larger model
+# 2 larger model
 def create_larger():
 	# create model
 	model = Sequential()
@@ -161,7 +161,7 @@ results = cross_val_score(pipeline, pca.components_, encoded_Y, cv=kfold)
 print("Larger: %.2f%% (%.2f%%)" % (results.mean()*100, results.std()*100))
 # Larger: 71.73% (10.34%)
 
-# smaller model
+# 3 smaller model
 def create_smaller():
 	# create model
 	model = Sequential()
@@ -184,24 +184,20 @@ print("Smaller: %.2f%% (%.2f%%)" % (results.mean()*100, results.std()*100))
 
 # Sparse Autoencoder
 
-data_PCA = pca.components_
-
 Y = data_t.iloc[:,2647]
 
 n = int(data_t.shape[1]*0.1)
 s = np.random.randint(1,2646, n)
 
-df_PCA = pd.DataFrame(data_PCA, index=list(range(0, 77))) #77x77
+df_ = pd.DataFrame(data_, index=list(range(0, 77))) #77x77
 df_raw = pd.DataFrame(data_t.iloc[:,s], index=list(range(1,77))) #76x264
 
-X = pd.concat([df_PCA.iloc[1:77,0:76], df_raw], axis=1, join_axes=[df_PCA.iloc[1:102,0:101].index]) #76x340
+X = pd.concat([df_.iloc[1:77,0:76], df_raw], axis=1, join_axes=[df_.iloc[1:102,0:101].index]) #76x340
 
 Xs = minmax_scale(X, axis = 0)
 ncol = Xs.shape[1]
 
 Xs.shape,ncol
-# print(df_PCA.shape, '\n', df_raw.shape ,'\n', X.shape, '\n' , X.iloc[0,:], '\n', X.iloc[75,:])
-# print(Xs.shape,'\n', Xs)
 
 # TRAIN e TEST
 S_X_train, S_X_test, S_Y_train, S_Y_test = train_test_split(Xs, Y[1:77], test_size = 0.4)
@@ -228,12 +224,6 @@ encoded_input = Input(shape = (encoding_dim, ))
 encoded_out = encoder.predict(S_X_test)
 encoded_out2 = encoder.predict(S_X_train)
 result = encoder.predict(Xs)
-
-#from nparray to csv
-#np.savetxt("encoded_out.csv", encoded_out, delimiter=",")
-#np.savetxt("encoded_out2.csv", encoded_out2, delimiter=",")
-#np.savetxt("tumor_train.csv", Y_train, delimiter = ",")
-#np.savetxt("tumor_test.csv", Y_test, delimiter = ",")
 
 #print shape
 encoded_out.shape, encoded_out2.shape
@@ -272,14 +262,14 @@ def create_baseline():
 	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 	return model
 
-# evaluate model with standardized dataset
+# 1 evaluate model with standardized dataset
 estimator = KerasClassifier(build_fn=create_baseline, epochs=100, batch_size=5, verbose=0)
 kfold = StratifiedKFold(n_splits=10, shuffle=True, random_state=seed)
 results = cross_val_score(estimator, result, encoded_Y, cv=kfold)
 print("Results: %.2f%% (%.2f%%)" % (results.mean()*100, results.std()*100))
 # Results: 90.00% (9.35%)
 
-# larger model
+# 2 larger model
 def create_larger():
 	# create model
 	model = Sequential()
@@ -298,7 +288,7 @@ results = cross_val_score(pipeline, result, encoded_Y, cv=kfold)
 print("Larger: %.2f%% (%.2f%%)" % (results.mean()*100, results.std()*100))
 # Larger: 92.50% (8.29%)
 
-# smaller model
+# 3 smaller model
 def create_smaller():
 	# create model
 	model = Sequential()
