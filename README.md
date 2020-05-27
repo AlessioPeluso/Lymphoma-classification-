@@ -25,27 +25,19 @@ Nella rete *smaller* sono stati stimati due strati, uno con 35 nodi ed uno con 1
 
 ## Risultati
 Le reti che hanno fornito risultati migliori sono state quelle successive alla riduzione della dimensionalità tramite *AutoEncoder*.\
-Possiamo vedere più nel dettaglio in tabella:\
-|---------------|-----------------|
-| PCA                             |
+Possiamo vedere più nel dettaglio in tabella come il secondo metodo sia nettamente più preciso nella classificazione:\
+- **PCA**                          
 |---------------|-----------------|
 | Method        | Accuracy        |
-|---------------|-----------------|
 | Baseline NNet | 69.05% (9.86%)  |
 | Larger NNet   | 71.73% (10.34%) |
 | Smaller NNet  | 72.98% (5.95%)  |
-|---------------|-----------------|
 
-|---------------|-----------------|
-| AutoEncoder                     |
+- **AutoEncoder**                  
 |---------------|-----------------|
 | Method        | Accuracy        |
-|---------------|-----------------|
 | Baseline NNet | 90.00% (9.35%)  |
 | Larger NNet   | 92.50% (8.29%)  |
 | Smaller NNet  | 85.65% (10.39%) |
-|---------------|-----------------|
-
-Come il secondo metodo sia nettamente più preciso nella classificazione.
 
 ---
